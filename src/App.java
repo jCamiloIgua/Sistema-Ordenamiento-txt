@@ -1,3 +1,4 @@
+
 public class App {
     public static void main(String[] args) throws Exception {
         System.out.println("Hola Coro!");
@@ -9,5 +10,6 @@ public class App {
         ventana.setBounds(0, 0, 350, 250);
         ventana.setVisible(true);//Hacer visible la ventana
         ventana.setLocationRelativeTo(null);//Posicionar la ventana en el medio de la panatalla
+
     }
 }
