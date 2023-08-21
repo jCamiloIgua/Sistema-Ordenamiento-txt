@@ -1,7 +1,11 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 public class Ventana extends JFrame implements ActionListener {
 
     private JLabel CargarArchivo;
@@ -44,11 +48,12 @@ public class Ventana extends JFrame implements ActionListener {
         SubirArchivo.addActionListener(this);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == Iniciar) {
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getSource() == Iniciar) {
+            CargarArreglo();
             VentanaDos ventanaDos = new VentanaDos();
             ventanaDos.setVisible(true);
-        } else if (e.getSource() == SubirArchivo) {
+        } else if (evt.getSource() == SubirArchivo) {
             JFileChooser jf = new JFileChooser();
             jf.showOpenDialog(this);
             File archivo = jf.getSelectedFile();
@@ -65,4 +70,28 @@ public class Ventana extends JFrame implements ActionListener {
         ventana.setLocationRelativeTo(null);// Posicionar la ventana en el medio de la panatalla
     }
 
+    public void CargarArreglo(){
+        String nombreUrl = Url.getText();;
+        List<Integer> numeros = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreUrl))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                int numero = Integer.parseInt(linea); // Convertir la línea a número
+                numeros.add(numero); // Almacenar el número en la lista
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+        }
+        // Convertir la lista a un arreglo
+        Integer[] arreglo = numeros.toArray(new Integer[0]);
+        // Imprimir el arreglo
+        System.out.println("arreglo");
+
+        System.out.println(arreglo.length);
+
+        Algoritmos asd = new Algoritmos();
+        asd.sort(arreglo, 0, arreglo.length-1);
+        System.out.println("\nSorted array is");
+        asd.printArray(arreglo);
+    }
 }
