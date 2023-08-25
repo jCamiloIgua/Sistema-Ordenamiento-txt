@@ -2,24 +2,23 @@ package Modelo;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Control_Archivos {
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileSystemView;
 
-    
-    /** 
-     * @param nombreUrl
-     * @param metodo
-     */
-    public void CargarArreglo(String nombreUrl, String metodo) {
+public class Control_Archivos {
+    public String dirr;
+
+    public void CargarArreglo(String nombreUrl, String metodo, String orden, String nombre) {
         List<Integer> numeros = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(nombreUrl))) {
-            System.out.println("hola si");
             String linea;
             while ((linea = br.readLine()) != null) {
                 int numero = Integer.parseInt(linea); // Convertir la línea a número
@@ -30,77 +29,58 @@ public class Control_Archivos {
             for (int i = 0; i < numeros.size(); i++) {
                 arreglo[i] = numeros.get(i);
             }
-
-            Algoritmos asd = new Algoritmos();
-            metodo = "quick";
-
-            switch (metodo) {
-                case "merge":
-                    asd.mergeSort(arreglo, 0, arreglo.length - 1);
-                    System.out.println("\nSorted array is");
+            Algoritmos algoritmo = new Algoritmos();
+            System.out.println("metodo " + metodo);
+            System.out.println("orden " + orden);
+            System.out.println("nombreUrl " + nombreUrl);
+            switch (orden) {
+                case "Merge Sort":
+                    algoritmo.sortS(arreglo, 0, arreglo.length - 1);
+                    if (metodo.equals("Mayor a menor")) {
+                        algoritmo.alreves(arreglo);
+                        guardarArreglo(arreglo, nombre);
+                    } else {
+                        guardarArreglo(arreglo, nombre);
+                    }
                     break;
-                case "quick":
-                System.out.println("quick");
-                asd.quickSort(arreglo, 0, arreglo.length - 1);
-                asd.imprimirArreglo(arreglo);
+                case "Shell Sort":
+                    algoritmo.ShellSort(arreglo);
+                    if (metodo.equals("Mayor a menor")) {
+                        algoritmo.alreves(arreglo);
+                        guardarArreglo(arreglo,nombre);
+                    } else {
+                        guardarArreglo(arreglo,nombre);
+                    }
                     break;
-                
-                default: //default será el mas optimo
-
-                
+                case "Quick Sort": // default será el mas optimo
+                    algoritmo.quickSort(arreglo, 0, arreglo.length - 1);
+                    if (orden.equals("Mayor a menor")) {
+                        algoritmo.alreves(arreglo);
+                        guardarArreglo(arreglo,nombre);
+                    } else {
+                        guardarArreglo(arreglo,nombre);
+                    }
                     break;
             }
-            
-            /*
-            asd.printArray(arreglo);
-            Control_Archivos cn = new Control_Archivos();
-            cn.guardarNumerosEnArchivo(nombreUrl, arreglo);
-            System.out.println();
-            System.out.println("termino"); */
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
         }
-        // Convertir la lista a un arreglo
-
-        // Imprimir el arreglo
-
     }
-
-    
-    /** 
-     * @param arreglo
-     */
-    public void guardar(Integer[] arreglo) {
-        try {
-            FileWriter writer = new FileWriter("asdasd.txt");
-            for (int elemento : arreglo) {
-                writer.write(Integer.toString(arreglo[elemento]));
-                writer.write(System.lineSeparator());
-            }
-            writer.close();
-            System.out.println("Arreglo ordenado por inserción escrito en el archivo exitosamente.");
-        } catch (IOException e) {
-            System.out.println("Ocurrió un error al escribir en el archivo: " + e.getMessage());
-        }
-    }
-
-    public void guardarNumerosEnArchivo(String nombreArchivo, int[] arreglo) {
-        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("asd.txt")))) {
-            for (Integer numero : arreglo) {
-                pw.println(numero);
-            }
-        } catch (IOException e) {
-            System.err.println("Error al guardar el archivo: " + e.getMessage());
-        }
-    }
-
-    public class ArregloToFileWriter {
-        public void guardarArregloEnArchivo(int[] arreglo, String rutaArchivo) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
+    public static void guardarArreglo(int[] arreglo, String nombreArchivo) {
+        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnValue = fileChooser.showSaveDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedDirectory = fileChooser.getSelectedFile();
+            File archivo = new File(selectedDirectory, nombreArchivo);
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
                 for (int numero : arreglo) {
-                    bw.write(Integer.toString(numero)); // Convertir número a String y escribirlo
-                    bw.newLine(); // Agregar una nueva línea después de cada número
+                    writer.write(Integer.toString(numero));
+                    writer.newLine();
                 }
+                writer.close();
+                JOptionPane.showMessageDialog(null, "Arreglo guardado! \n" + archivo.getAbsolutePath());
             } catch (IOException e) {
                 System.err.println("Error al escribir en el archivo: " + e.getMessage());
             }

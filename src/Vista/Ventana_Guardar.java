@@ -2,71 +2,44 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.event.*;
-import Modelo.*;
-
+import Modelo.Control_Archivos;
 
 public class Ventana_Guardar extends JFrame implements ActionListener {
     private JButton guardar;
-    public String ubicacion;
+    private JTextField Path;
     public String Url;
-    public Ventana_Guardar(String ubicacion) {
+    public String Order;
+    public String Algorithm;
 
+    public String path = "";
+    public String direccion;
+    public Ventana_Guardar(String ubicacion,String algoritmo, String orden) {
         setTitle("Guardar");
         setLayout(null);
-        System.out.println("ubi en cons "+ ubicacion);
-
         this.setBounds(0, 0, 300, 200);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-
         guardar = new JButton("guardar");
-        guardar.setBounds(5, 115, 70, 20);
-        add(guardar);
+        guardar.setBounds(55, 115, 70, 20);
         guardar.addActionListener(this);
-
-        Url=ubicacion;
-        datos(ubicacion, "a","a");
+        add(guardar);
+        Path = new JTextField("");
+        Path.setBounds(10, 10, 150, 20);
+        add(Path);
+        Url = ubicacion;
+        Order = orden;
+        Algorithm = algoritmo;
     }
-
-    
-    /** 
-     * @param evt
-     */
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == guardar) {
-            System.out.println(Url+ " Url ubicaicon");
-        } /*
-           * else if (evt.getSource() == guardar) {
-           * JFileChooser jf = new JFileChooser();
-           * jf.showOpenDialog(this);
-           * File archivo = jf.getSelectedFile();
-           * if (archivo != null) {
-           * Url.setText(archivo.getAbsolutePath());
-           * }
-           * }
-           */
-    }
-
-    
-    /** 
-     * @param ubicacion
-     * @param metodo
-     * @param orden
-     */
-    public void datos(String ubicacion, String metodo, String orden) {
-
-        Control_Archivos cargar = new Control_Archivos();
-        cargar.CargarArreglo(ubicacion, metodo);
-        Algoritmos algoritmo = new Algoritmos();
-
-        if(algoritmo.equals("merge")){
-
-        } else if (algoritmo.equals("quick")){
-
-        } else{
-
+            System.out.println(Algorithm + "alg");
+            datos(Url, Algorithm, Order, Order + "-" + Path.getText() + ".txt");
+            this.dispose();
         }
-
-        
     }
+    public void datos(String ubicacion, String metodo, String orden, String nombre) {
+        Control_Archivos cargar = new Control_Archivos();
+        cargar.CargarArreglo(ubicacion, metodo, orden, nombre);
+    }
+
 }
