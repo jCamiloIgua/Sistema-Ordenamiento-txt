@@ -1,11 +1,10 @@
 package Vista;
 
 import Modelo.*;
-
 import javax.swing.*;
 import java.awt.event.*;
-
 import java.io.File;
+import java.nio.file.Path;
 
 public class Ventana_Principal extends JFrame implements ActionListener {
 
@@ -17,6 +16,7 @@ public class Ventana_Principal extends JFrame implements ActionListener {
     private JComboBox ASCDESC;
     private JComboBox Metodo;
     private JTextField Url;
+    public int botonVerificar = 0;
 
     public Ventana_Principal() { // se crea una clase llamada ventana
         String[] modoDeOrdenar = { "Mayor a menor", "Menor a mayor" };
@@ -25,10 +25,10 @@ public class Ventana_Principal extends JFrame implements ActionListener {
         setTitle("Bienvenido");// se le coloca el titulo a la ventana
         setLayout(null);
         CargarArchivo = new JLabel("Cargar archivo TXT");// Se crea el objeto del JLabel con su nombre
-        CargarArchivo.setBounds(5, 10, 150, 20);// Se le da la posicion y altura con ancho de inicio
+        CargarArchivo.setBounds(5, 10, 151, 20);// Se le da la posicion y altura con ancho de inicio
         add(CargarArchivo);
         MetodoOrdenamiento = new JLabel("Algoritmo de ordenamiento");
-        MetodoOrdenamiento.setBounds(5, 45, 150, 20);
+        MetodoOrdenamiento.setBounds(5, 45, 155, 20);
         add(MetodoOrdenamiento);
         ASCDESC = new JComboBox<>(metodosOrdenamiento);
         ASCDESC.setBounds(160, 45, 150, 20);
@@ -44,6 +44,7 @@ public class Ventana_Principal extends JFrame implements ActionListener {
         add(Continuar);
         Continuar.addActionListener(this);
         Url = new JTextField("");
+        Url.setEditable(false);//no se pueda editar
         Url.setBounds(160, 10, 150, 20);
         add(Url);
         SubirArchivo = new JButton("Abrir");
@@ -54,28 +55,32 @@ public class Ventana_Principal extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == Continuar) {
+        int paso = botonVerificar; //trae 0
+        if ((evt.getSource() == Continuar) && (paso == 1)) {//segundo
             String seleccion = Metodo.getSelectedItem().toString();
             String seleccion2 = ASCDESC.getSelectedItem().toString();
             String ubicacion = Url.getText();
             Ventana_Guardar ventana_Guardar = new Ventana_Guardar(ubicacion, seleccion, seleccion2);
             ventana_Guardar.setVisible(true);
-        } else if (evt.getSource() == SubirArchivo) {
+        } else if (evt.getSource() == SubirArchivo) {//primero
             JFileChooser jf = new JFileChooser();
             jf.showOpenDialog(this);
             File archivo = jf.getSelectedFile();
+            botonVerificar = 1;//subio archivo
             if (archivo != null) {
-                Url.setText(archivo.getAbsolutePath());
+            Url.setText(archivo.getAbsolutePath()); 
             }
         }
     }
 
     public static void main(String[] args) {
         Ventana_Principal ventana = new Ventana_Principal();
-        ventana.setBounds(0, 0, 420, 250);
+        ventana.setBounds(0, 0, 420, 195);
         ventana.setVisible(true);// Hacer visible la ventana
         ventana.setLocationRelativeTo(null);// Posicionar la ventana en el medio de la panatalla
+        ventana.setResizable(false);//no se pueda agrandar ventana
     }
+
     
 }
 

@@ -7,6 +7,7 @@ import Modelo.Control_Archivos;
 public class Ventana_Guardar extends JFrame implements ActionListener {
     private JButton guardar;
     private JTextField Path;
+    private JLabel guardarDoc;
     public String Url;
     public String Order;
     public String Algorithm;
@@ -16,15 +17,19 @@ public class Ventana_Guardar extends JFrame implements ActionListener {
     public Ventana_Guardar(String ubicacion,String algoritmo, String orden) {
         setTitle("Guardar");
         setLayout(null);
-        this.setBounds(0, 0, 300, 200);
+        this.setResizable(false);//no se pueda agrandar ventana
+        this.setBounds(0, 0, 300, 135);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        guardarDoc = new JLabel("Guardar archivo como:");
+        guardarDoc.setBounds(10, 10, 150, 20);
+        add(guardarDoc);
         guardar = new JButton("guardar");
-        guardar.setBounds(55, 115, 70, 20);
+        guardar.setBounds(163, 33, 80, 20);
         guardar.addActionListener(this);
         add(guardar);
         Path = new JTextField("");
-        Path.setBounds(10, 10, 150, 20);
+        Path.setBounds(10, 33, 150, 20);
         add(Path);
         Url = ubicacion;
         Order = orden;

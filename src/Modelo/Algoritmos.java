@@ -9,7 +9,6 @@ public class Algoritmos {
     this.temporal = 0;
     this.saltos = 0;
   }
-
   /*
    * Funcion para mezclar ambos arreglos, donde:
    * El arreglo izquierdo va desde inicio del arreglo, hasta indice medio del
